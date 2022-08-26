@@ -1,0 +1,3 @@
+Database Entagrasyonu Yapılacak
+Hasta Profil Sayfası Yapılacak
+Eklenmesi Gereken Yerlere Listview eklenecek(Tüm Hastalar Sayfası,Islemn Sayfası,HastaProfil Sayfası)

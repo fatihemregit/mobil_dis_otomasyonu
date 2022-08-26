@@ -42,7 +42,7 @@ class _AnasayfaState extends State<Anasayfa> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.plus_one),
             label: "Hasta Ekle",
           ),
           BottomNavigationBarItem(
