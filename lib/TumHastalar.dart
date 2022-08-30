@@ -1,5 +1,7 @@
+import 'package:abi_project/HastaDao.dart';
+import 'package:abi_project/HastaProfil.dart';
 import 'package:flutter/material.dart';
-
+import 'package:abi_project/Hasta.dart';
 
 class TumHastalar extends StatefulWidget {
   const TumHastalar({Key? key}) : super(key: key);
@@ -9,13 +11,88 @@ class TumHastalar extends StatefulWidget {
 }
 
 class _TumHastalarState extends State<TumHastalar> {
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Tüm Hastaları Görüntüleme Menüsü"),),
       ),
-      body: Center(child: Text("Tüm Hastaları Görüntüleme Sayfası"),),
+      body: FutureBuilder<List<Hasta>>(
+        future: HastaDao().tumHastalar(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            var elemanlar = snapshot.data;
+            return ListView.builder(
+              itemCount: elemanlar!.length,
+              itemBuilder: (context,indeks){
+                // listviewdeki elementlerin tasarımı
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HastaProfil(elemanlar[indeks])));
+                  },
+                  child: Card(
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Text(elemanlar[indeks].tam_ad),
+                          Spacer(),
+                          ElevatedButton(
+                            child: Text("SİL"),
+                            onPressed: (){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("Hastayı Siliyorsun!"),
+                                    content: Text(" ${elemanlar[indeks].tc} tc li ${elemanlar[indeks].tam_ad} adlı  ${elemanlar[indeks].hasta_no} no lu hastayı siliyorsun! Emin misin?"),
+                                    actions: [
+                                      TextButton(
+                                        child: Text("Evet"),
+                                        onPressed: (){
+                                          HastaDao().hastaSil(elemanlar[indeks].hasta_id);
+                                          setState(() {
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                      ),//evet Butonu
+                                      TextButton(
+                                        child: Text("Hayır"),
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+
+
+
+
+
+          }else{
+            return Center(child: Text("Kayıtlı Hasta Yok"),);
+          }
+        },
+      ),
     );
   }
 }

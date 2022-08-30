@@ -1,3 +1,5 @@
+import 'package:abi_project/Hasta.dart';
+import 'package:abi_project/HastaDao.dart';
 import 'package:abi_project/Islemn.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,23 @@ class MainSayfa extends StatefulWidget {
 }
 
 class _MainSayfaState extends State<MainSayfa> {
+
+  Future<void> goruntu() async{
+    var gelenhastalar = await HastaDao().tumHastalar();
+
+    for(Hasta h in gelenhastalar){
+      print("***********");
+      print("Hasta id : ${h.hasta_id}");
+      print("Hasta ad : ${h.tam_ad}");
+      print("Hasta tc : ${h.tc}");
+      print("Hasta no : ${h.hasta_no}");
+      print("Hasta işlem tür : ${h.islem_tur}");
+    }
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

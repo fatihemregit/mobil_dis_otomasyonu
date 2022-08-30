@@ -1,3 +1,5 @@
+
+import 'package:abi_project/HastaDao.dart';
 import 'package:flutter/material.dart';
 
 class HastaEkle extends StatefulWidget {
@@ -13,6 +15,7 @@ class _HastaEkleState extends State<HastaEkle> {
   var tfTc = TextEditingController();
   var tfHastaNumarasi = TextEditingController();
   String islemAdi = "İşlem Seçmek İçin Tıkla";
+  int islemTur = 0;
 
   void temizle(){
     tfTc.text = "";
@@ -109,36 +112,43 @@ class _HastaEkleState extends State<HastaEkle> {
                     islemAdi = "İşlem 1";
                     setState(() {
                     });
+                    islemTur = 1;
                   }
                   if(itemid == 2){
                     islemAdi = "İşlem 2";
                     setState(() {
                     });
+                    islemTur = 2;
                   }
                   if(itemid == 3){
                     islemAdi = "İşlem 3";
                     setState(() {
                     });
+                    islemTur = 3;
                   }
                   if(itemid == 4){
                     islemAdi = "İşlem 4";
                     setState(() {
                     });
+                    islemTur = 4;
                   }
                   if(itemid == 5){
                     islemAdi = "İşlem 5";
                     setState(() {
                     });
+                    islemTur = 5;
                   }
                   if(itemid == 6){
                     islemAdi = "İşlem 6";
                     setState(() {
                     });
+                    islemTur = 6;
                   }
                   if(itemid == 7){
                     islemAdi = "İşlem 7";
                     setState(() {
                     });
+                    islemTur = 7;
                   }
                 },
               ),
@@ -150,6 +160,11 @@ class _HastaEkleState extends State<HastaEkle> {
                     child: Text("Kaydet",style: TextStyle(color: Colors.white),),
                     style: ElevatedButton.styleFrom(primary: Colors.green),
                     onPressed: (){
+                      String tam_ad = tfIsim.text;
+                      String tc = tfTc.text;
+                      int hasta_no = int.parse(tfHastaNumarasi.text);
+                      int islem_tur = islemTur;
+                      HastaDao().hastaKayit(tam_ad, tc, hasta_no, islem_tur);
                       print("${tfIsim.text} Adlı ${tfTc.text} tc li ${tfHastaNumarasi.text} no lu ${islemAdi} li hasta kaydedildi ");
                       setState(() {
                         temizle();
