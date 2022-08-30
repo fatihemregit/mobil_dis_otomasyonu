@@ -1,6 +1,7 @@
 import 'package:abi_project/Hasta.dart';
 import 'package:abi_project/HastaDao.dart';
 import 'package:flutter/material.dart';
+import 'package:abi_project/Yislem.dart';
 
 
 /*
@@ -157,13 +158,93 @@ class HastaProfilIslemleriGoruntule extends StatefulWidget {
 }
 
 class _HastaProfilIslemleriGoruntuleState extends State<HastaProfilIslemleriGoruntule> {
+
+  var tfAlert = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("${widget.gelenHasta.tam_ad}Adlı Hastaya Yapılan İşlemler"),),
+        actions: [
+          TextButton(
+            child: Text("Ekle",style: TextStyle(color: Colors.black),),
+            onPressed: (){
+              showDialog(
+                context: context,
+                builder: (BuildContext context){
+                  return AlertDialog(
+                    title: Text("${widget.gelenHasta.tam_ad} Adlı Hastaya işlem ekleniyor"),
+                    content: SizedBox(
+                      height: 80,
+                      child: TextField(
+                        controller: tfAlert,
+                        decoration: InputDecoration(
+                          hintText: "yapılan işlemi yazınız",
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text("İptal"),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      ),//iptal Butonu
+                      TextButton(
+                        child: Text("Kaydet"),
+                        onPressed: (){
+                          HastaDao().islemKayit(widget.gelenHasta.hasta_id, tfAlert.text);
+                          setState(() {});
+                          Navigator.pop(context);
+                        },
+                      ),//kayıt Butonu
+                    ],
+                  );
+                }
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(child: Text("İşlem görüntüleme menüsü"),),
+      body: FutureBuilder<List<Yislem>>(
+        future: HastaDao().hastaIslemleriniGetir(widget.gelenHasta.hasta_id),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            var gelenveri = snapshot.data;
+            return ListView.builder(
+              itemCount: gelenveri!.length,
+              itemBuilder: (context,indeks){
+                return Card(
+                  child: SizedBox(
+                    height: 70,
+                    child: Row(
+                      children: [
+                        Text(gelenveri[indeks].yapilan_islem),
+                        Spacer(),
+                        ElevatedButton(
+                          child: Text("SİL"),
+                          onPressed: () async {
+
+                            HastaDao().islemSil(indeks + 1);
+                            setState(() {
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+
+
+
+          }else{
+            return Center(child: Text("Veritabanında Hastaya Yapılmış Işlem Bulunamadı"),);
+          }
+        },
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:abi_project/Hasta.dart';
 import 'package:abi_project/VeritabaniYardimcisi.dart';
+import 'package:abi_project/Yislem.dart';
 
 class HastaDao{
   //veritabanıyla alaklı tüm metotlar buraya yazılacak
@@ -35,7 +36,7 @@ class HastaDao{
     //Hastalar VeriTabanından hastanın satırını silme
     await db.delete("Hastalar",where: "hasta_id = ?",whereArgs: [hasta_id]);
     //İşlemler VeriTabanından hasta ile alakalı işlemleri silme
-    //await db.delete("Yislem",where: "hasta_id = ?",whereArgs: [hasta_id]);//bu kısım hastaya işlem ekleme sistemi çalıştığında açılacak
+    await db.delete("Yislem",where: "hasta_id = ?",whereArgs: [hasta_id]);//bu kısım hastaya işlem ekleme sistemi çalıştığında açılacak
   }
   Future<Hasta> birHastaGetir(int hasta_id) async{
     var db = await VeritabaniYardimcisi.veritabaniErisim();
@@ -58,5 +59,41 @@ class HastaDao{
     bilgiler["islem_tur"] = islem_tur;
 
     await db.update("Hastalar",bilgiler,where: "hasta_id=?",whereArgs: [hasta_id]);
+  }
+  Future<void> islemKayit(int hasta_id ,String yapilanIslem) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+
+    var bilgiler = Map<String,dynamic>();
+
+    bilgiler["hasta_id"] = hasta_id;
+
+    bilgiler["yapilan_islem"] = yapilanIslem;
+
+    await db.insert("yislem",bilgiler);
+  }
+  Future<List<Yislem>> hastaIslemleriniGetir(int hasta_id) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM yislem WHERE hasta_id=$hasta_id");
+
+    return List.generate(maps.length, (i){
+      var satir = maps[i];
+
+      //return Hasta(satir["hasta_id"],satir["tam_ad"],satir["tc"],satir["hasta_no"],satir["islem_tur"]);
+      return Yislem(satir["islem_id"],satir["hasta_id"],satir["yapilan_islem"]);
+    });
+
+  }
+  Future<void> islemSil(int islem_id) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+    // İşlemler VeriTabanından hasta ile alakalı işlemleri silme
+    await db.delete("Yislem",where: "islem_id = ?",whereArgs: [islem_id]);
+  }
+  Future<int> islemidOgren(String islem_ismi) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM yislem WHERE yapilan_islem='$islem_ismi' ");
+    var satir = maps[0];
+    return int.parse(satir["islem_id"]);
   }
 }
