@@ -109,5 +109,28 @@ class HastaDao{
 
     });
   }
+  Future<List<Hasta>> tumHastalarArama(String arama_kelimesi) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
 
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM Hastalar WHERE tam_ad like '%$arama_kelimesi%' ");
+
+    return List.generate(maps.length, (i){
+      var satir = maps[i];
+
+      return Hasta(satir["hasta_id"],satir["tam_ad"],satir["tc"],satir["hasta_no"],satir["islem_tur"]);
+
+    });
+  }
+  Future<List<Hasta>> tumHastalarislemnarama(int islem_tur,String arama_kelimesi) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM Hastalar WHERE islem_tur = $islem_tur AND tam_ad like '%$arama_kelimesi%'");
+
+    return List.generate(maps.length, (i){
+      var satir = maps[i];
+
+      return Hasta(satir["hasta_id"],satir["tam_ad"],satir["tc"],satir["hasta_no"],satir["islem_tur"]);
+
+    });
+  }
 }

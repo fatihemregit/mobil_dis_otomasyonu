@@ -28,7 +28,9 @@ class _IslemnState extends State<Islemn> {
         TextField(
           decoration: InputDecoration(hintText: "Aramak için birşey yazın"),
           onChanged: (sonuc){
-            aranilacakMetin = sonuc;
+            setState(() {
+              aranilacakMetin = sonuc;
+            });
           },
         )
             :Text("İşlem ${widget.Islemid}"),
@@ -53,7 +55,7 @@ class _IslemnState extends State<Islemn> {
         ],
       ),
       body: FutureBuilder<List<Hasta>>(
-        future: HastaDao().tumHastalarislemn(widget.Islemid),
+        future: aramadurumu ?  HastaDao().tumHastalarislemnarama(widget.Islemid, aranilacakMetin):HastaDao().tumHastalarislemn(widget.Islemid),
         builder: (context,snapshot){
           if(snapshot.hasData){
             var gelenVeri = snapshot.data;

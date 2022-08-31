@@ -33,7 +33,9 @@ class _TumHastalarState extends State<TumHastalar> {
             TextField(
               decoration: InputDecoration(hintText: "Aramak için birşey yazın"),
               onChanged: (sonuc){
-                aranilacakMetin = sonuc;
+                setState(() {
+                  aranilacakMetin = sonuc;
+                });
               },
             )
             :Center(child: Text("Tüm Hastaları Görüntüleme Menüsü"),),
@@ -58,7 +60,7 @@ class _TumHastalarState extends State<TumHastalar> {
         ],
       ),
       body: FutureBuilder<List<Hasta>>(
-        future: HastaDao().tumHastalar(),
+        future: aramadurumu ? HastaDao().tumHastalarArama(aranilacakMetin):HastaDao().tumHastalar(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             var elemanlar = snapshot.data;
