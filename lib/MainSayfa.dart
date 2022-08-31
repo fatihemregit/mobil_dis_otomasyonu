@@ -27,6 +27,11 @@ class _MainSayfaState extends State<MainSayfa> {
   }
 
 
+  @override
+  void initState() {
+    super.initState();
+    goruntu();
+  }
 
   @override
   Widget build(BuildContext context) {

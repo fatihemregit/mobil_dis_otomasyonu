@@ -195,6 +195,7 @@ class _HastaProfilIslemleriGoruntuleState extends State<HastaProfilIslemleriGoru
                         child: Text("Kaydet"),
                         onPressed: (){
                           HastaDao().islemKayit(widget.gelenHasta.hasta_id, tfAlert.text);
+                          tfAlert.text ="";
                           setState(() {});
                           Navigator.pop(context);
                         },
@@ -224,9 +225,9 @@ class _HastaProfilIslemleriGoruntuleState extends State<HastaProfilIslemleriGoru
                         Spacer(),
                         ElevatedButton(
                           child: Text("SİL"),
-                          onPressed: () async {
-
-                            HastaDao().islemSil(indeks + 1);
+                          onPressed: () {
+                            print("yapılan işlem:${gelenveri[indeks].yapilan_islem}");
+                            HastaDao().islemSil(gelenveri[indeks].yapilan_islem);
                             setState(() {
                             });
                           },

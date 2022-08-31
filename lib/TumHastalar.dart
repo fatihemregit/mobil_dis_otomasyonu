@@ -12,6 +12,12 @@ class TumHastalar extends StatefulWidget {
 
 class _TumHastalarState extends State<TumHastalar> {
 
+  bool aramadurumu = false ;
+
+
+  String aranilacakMetin = "";
+
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +29,33 @@ class _TumHastalarState extends State<TumHastalar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Tüm Hastaları Görüntüleme Menüsü"),),
+        title: aramadurumu ?
+            TextField(
+              decoration: InputDecoration(hintText: "Aramak için birşey yazın"),
+              onChanged: (sonuc){
+                aranilacakMetin = sonuc;
+              },
+            )
+            :Center(child: Text("Tüm Hastaları Görüntüleme Menüsü"),),
+        actions: [
+          aramadurumu ? IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: (){
+              setState(() {
+                aramadurumu = false;
+              });
+            },
+          ):IconButton(
+            icon: Icon(Icons.search),
+            onPressed: (){
+              setState(() {
+                aramadurumu = true;
+              });
+            },
+          )
+          ,
+
+        ],
       ),
       body: FutureBuilder<List<Hasta>>(
         future: HastaDao().tumHastalar(),

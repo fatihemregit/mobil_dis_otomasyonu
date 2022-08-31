@@ -84,10 +84,11 @@ class HastaDao{
     });
 
   }
-  Future<void> islemSil(int islem_id) async{
+  Future<void> islemSil(String yapilan_islem) async{
     var db = await VeritabaniYardimcisi.veritabaniErisim();
     // İşlemler VeriTabanından hasta ile alakalı işlemleri silme
-    await db.delete("Yislem",where: "islem_id = ?",whereArgs: [islem_id]);
+    //await db.delete("yislem",where: "islem_id = ?",whereArgs: [islem_id]);
+    await db.delete("yislem",where: "yapilan_islem = ?",whereArgs: [yapilan_islem]);
   }
   Future<int> islemidOgren(String islem_ismi) async{
     var db = await VeritabaniYardimcisi.veritabaniErisim();
@@ -96,4 +97,17 @@ class HastaDao{
     var satir = maps[0];
     return int.parse(satir["islem_id"]);
   }
+  Future<List<Hasta>> tumHastalarislemn(int islem_tur) async{
+    var db = await VeritabaniYardimcisi.veritabaniErisim();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM Hastalar WHERE islem_tur = $islem_tur");
+
+    return List.generate(maps.length, (i){
+      var satir = maps[i];
+
+      return Hasta(satir["hasta_id"],satir["tam_ad"],satir["tc"],satir["hasta_no"],satir["islem_tur"]);
+
+    });
+  }
+
 }
