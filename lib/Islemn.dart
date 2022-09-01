@@ -2,6 +2,8 @@ import 'package:abi_project/Hasta.dart';
 import 'package:abi_project/HastaDao.dart';
 import 'package:flutter/material.dart';
 
+import 'HastaProfil.dart';
+
 class Islemn extends StatefulWidget {
 
   late int Islemid;
@@ -62,45 +64,50 @@ class _IslemnState extends State<Islemn> {
             return ListView.builder(
               itemCount: gelenVeri!.length,
               itemBuilder: (context,indeks){
-                return Card(
-                  child: SizedBox(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Text(gelenVeri[indeks].tam_ad),
-                        Spacer(),
-                        ElevatedButton(
-                          child: Text("SİL"),
-                          onPressed: (){
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: Text("Hastayı Siliyorsun!"),
-                                    content: Text(" ${gelenVeri[indeks].tc} tc li ${gelenVeri[indeks].tam_ad} adlı  ${gelenVeri[indeks].hasta_no} no lu hastayı siliyorsun! Emin misin?"),
-                                    actions: [
-                                      TextButton(
-                                        child: Text("Evet"),
-                                        onPressed: (){
-                                          HastaDao().hastaSil(gelenVeri[indeks].hasta_id);
-                                          setState(() {
-                                          });
-                                          Navigator.pop(context);
-                                        },
-                                      ),//evet Butonu
-                                      TextButton(
-                                        child: Text("Hayır"),
-                                        onPressed: (){
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                }
-                            );
-                          },
-                        ),
-                      ],
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HastaProfil(gelenVeri[indeks])));
+                  },
+                  child: Card(
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Text(gelenVeri[indeks].tam_ad),
+                          Spacer(),
+                          ElevatedButton(
+                            child: Text("SİL"),
+                            onPressed: (){
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context){
+                                    return AlertDialog(
+                                      title: Text("Hastayı Siliyorsun!"),
+                                      content: Text(" ${gelenVeri[indeks].tc} tc li ${gelenVeri[indeks].tam_ad} adlı  ${gelenVeri[indeks].hasta_no} no lu hastayı siliyorsun! Emin misin?"),
+                                      actions: [
+                                        TextButton(
+                                          child: Text("Evet"),
+                                          onPressed: (){
+                                            HastaDao().hastaSil(gelenVeri[indeks].hasta_id);
+                                            setState(() {
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        ),//evet Butonu
+                                        TextButton(
+                                          child: Text("Hayır"),
+                                          onPressed: (){
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
