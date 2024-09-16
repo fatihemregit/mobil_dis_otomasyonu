@@ -5,6 +5,7 @@ I coded this project because my big brother wanted a dental app for himself
 <br>
 I devoloped the project with flutter and sqlite
 <br>
+[trReadmeHere](https://github.com/fatihemregit/mobil_dis_otomasyonu/blob/master/README_TR.md)
 ## Setup
 firstly `cd  mobil_dis_otomasyonu`
 <br>
